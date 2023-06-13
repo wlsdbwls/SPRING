@@ -3,12 +3,12 @@ package com.example.demo.account.controller;
 import com.example.demo.account.controller.form.AccountLoginRequestForm;
 import com.example.demo.account.controller.form.AccountRegisterForm;
 import com.example.demo.account.service.AccountService;
+import com.example.demo.redis.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @Slf4j
 @RestController
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AccountController {
 
     final private AccountService accountService;
+    final private RedisService redisService;
 
     @PostMapping("/register")
     public Boolean accountRegister (@RequestBody AccountRegisterForm requestForm) {
@@ -27,6 +28,28 @@ public class AccountController {
     public String accountLogin(@RequestBody AccountLoginRequestForm accountLoginRequestForm) {
 
         String userToken = accountService.login(accountLoginRequestForm);
+        Long accountID= accountService.findAccountIdByEmail(accountLoginRequestForm.getEmail());
+        redisService.setKeyAndValue(userToken,accountID);
+
+        return userToken;
+    }
+
+    @GetMapping("/authentication")
+    public String getUserInfo() {
+
+        final Long NO_ACCOUNT = -1L;
+
+        String email =
+        Long accountId = accountService.findAccountIdByEmail(email);
+
+        if(accountId == NO_ACCOUNT) {
+            accountId = accountService.signUpWithEmail(email);
+        }
+
+        String userToken = UUID.randomUUID().toString();
+
+        redisService.setKeyAndValue(userToken, accountId);
+        // userToken으로 accountId 가져오기 (key - value)
 
         return userToken;
     }
