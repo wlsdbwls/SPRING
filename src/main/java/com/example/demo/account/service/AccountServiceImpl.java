@@ -34,4 +34,20 @@ public class AccountServiceImpl implements AccountService{
 
         return true;
     }
+
+    @Override
+    public String login(AccountLoginRequestForm requestForm) {
+        Optional<Account> maybeAccount = accountRepository.findByEmail(requestForm.getEmail());
+
+        if(maybeAccount.isPresent()) {
+            if(requestForm.getPassword().equals(maybeAccount.get().getPassword())) {
+                final Account account = maybeAccount.get();
+                final String userToken = UUID.randomUUID().toString();
+                userTokenRepository.save(userToken, account.getId());
+                return userToken;
+            }
+        }
+
+        return null;
+    }
 }

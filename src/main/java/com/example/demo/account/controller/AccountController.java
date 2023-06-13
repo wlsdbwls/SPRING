@@ -22,4 +22,12 @@ public class AccountController {
     public Boolean accountRegister (@RequestBody AccountRegisterForm requestForm) {
         return accountService.register(requestForm.toAccountRegisterRequest());
     }
+
+    @PostMapping("/login")
+    public String accountLogin(@RequestBody AccountLoginRequestForm accountLoginRequestForm) {
+
+        String userToken = accountService.login(accountLoginRequestForm);
+
+        return userToken;
+    }
 }
