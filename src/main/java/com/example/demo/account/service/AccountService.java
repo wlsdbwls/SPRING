@@ -8,5 +8,4 @@ public interface AccountService {
     String login(AccountLoginRequestForm accountLoginRequestForm);
 
     Long findAccountIdByEmail(String email);
-
 }

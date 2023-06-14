@@ -50,4 +50,15 @@ public class AccountServiceImpl implements AccountService{
 
         return null;
     }
+
+    @Override
+    public Long findAccountIdByEmail(String email) {
+        Optional<Account> maybeAccount = accountRepository.findByEmail(email);
+
+        if (maybeAccount.isPresent()){
+            return maybeAccount.get().getId();
+        }
+
+        return null;
+    }
 }

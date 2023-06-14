@@ -33,24 +33,4 @@ public class AccountController {
 
         return userToken;
     }
-
-    @GetMapping("/authentication")
-    public String getUserInfo() {
-
-        final Long NO_ACCOUNT = -1L;
-
-        String email =
-        Long accountId = accountService.findAccountIdByEmail(email);
-
-        if(accountId == NO_ACCOUNT) {
-            accountId = accountService.signUpWithEmail(email);
-        }
-
-        String userToken = UUID.randomUUID().toString();
-
-        redisService.setKeyAndValue(userToken, accountId);
-        // userToken으로 accountId 가져오기 (key - value)
-
-        return userToken;
-    }
 }
