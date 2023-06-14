@@ -33,4 +33,10 @@ public class AccountController {
 
         return userToken;
     }
+
+    @GetMapping("/check-email/{email}")
+    public Boolean checkEmail(@PathVariable("email") String email) {
+
+        return accountService.checkEmailDuplication(email);
+    }
 }
