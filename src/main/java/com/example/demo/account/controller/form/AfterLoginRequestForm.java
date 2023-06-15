@@ -1,13 +1,12 @@
 package com.example.demo.account.controller.form;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @ToString
 public class AfterLoginRequestForm {
 
-    final private String userToken;
+    private String userToken;
 }
