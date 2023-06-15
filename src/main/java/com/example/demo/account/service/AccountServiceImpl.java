@@ -1,6 +1,7 @@
 package com.example.demo.account.service;
 
 import com.example.demo.account.controller.form.AccountLoginRequestForm;
+import com.example.demo.account.controller.form.AccountResponseForm;
 import com.example.demo.account.entity.Account;
 import com.example.demo.account.repository.AccountRepository;
 import com.example.demo.account.repository.UserTokenRepository;
@@ -71,5 +72,20 @@ public class AccountServiceImpl implements AccountService{
         } else {
             return true;
         }
+    }
+
+    @Override
+    public AccountResponseForm getAccountInfoById(Long accountId) {
+        final Optional<Account> maybeAccount = accountRepository.findById(accountId);
+
+        if (maybeAccount.isEmpty()) {
+            log.info("이런 계정은 존재하지 않습니다(해킹이 의십됩니다!");
+            return null;
+        }
+
+        Account account = maybeAccount.get();
+        final AccountResponseForm responseForm = new AccountResponseForm(account.getEmail());
+
+        return responseForm;
     }
 }

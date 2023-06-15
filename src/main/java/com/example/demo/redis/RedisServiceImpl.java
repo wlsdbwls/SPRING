@@ -21,4 +21,19 @@ public class RedisServiceImpl implements RedisService{
         ValueOperations<String, String> value = redisTemplate.opsForValue();
         value.set(userToken, accountIdToString, Duration.ofMinutes(3));
     }
+
+    @Override
+    public Long getValueByKey(String userToken) {
+        ValueOperations<String, String> value = redisTemplate.opsForValue();
+        String tmpAccountId = value.get(userToken);
+        Long accountId;
+
+        if (tmpAccountId == null) {
+            accountId = null;
+        } else {
+            accountId = Long.parseLong(tmpAccountId);
+        }
+
+        return accountId;
+    }
 }

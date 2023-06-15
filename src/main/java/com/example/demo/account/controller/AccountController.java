@@ -2,6 +2,8 @@ package com.example.demo.account.controller;
 
 import com.example.demo.account.controller.form.AccountLoginRequestForm;
 import com.example.demo.account.controller.form.AccountRegisterForm;
+import com.example.demo.account.controller.form.AccountResponseForm;
+import com.example.demo.account.controller.form.AfterLoginRequestForm;
 import com.example.demo.account.service.AccountService;
 import com.example.demo.redis.RedisService;
 import lombok.RequiredArgsConstructor;
@@ -38,5 +40,14 @@ public class AccountController {
     public Boolean checkEmail(@PathVariable("email") String email) {
 
         return accountService.checkEmailDuplication(email);
+    }
+
+    @PostMapping("/authentication")
+    public AccountResponseForm afterLoginTest(@RequestBody AfterLoginRequestForm requestForm) {
+
+        Long accountId = redisService.getValueByKey(requestForm.getUserToken());
+        log.info("accountId: " + accountId);
+
+        return accountService.getAccountInfoById(accountId);
     }
 }
