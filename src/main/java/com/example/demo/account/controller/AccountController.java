@@ -27,7 +27,7 @@ public class AccountController {
     }
 
     @PostMapping("/login")
-    public String accountLogin(@RequestBody AccountLoginRequestForm accountLoginRequestForm) {
+    public String accountLogin(@RequestBody AccountLoginRequestForm accountLoginRequestForm){
 
         String userToken = accountService.login(accountLoginRequestForm);
         Long accountID= accountService.findAccountIdByEmail(accountLoginRequestForm.getEmail());

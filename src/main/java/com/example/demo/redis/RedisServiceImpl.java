@@ -36,4 +36,10 @@ public class RedisServiceImpl implements RedisService{
 
         return accountId;
     }
+
+    @Override
+    public void deleteByKey(String token) {
+        redisTemplate.delete(token);
+    }
+
 }

@@ -7,10 +7,12 @@ import com.example.demo.account.repository.AccountRepository;
 import com.example.demo.account.repository.UserTokenRepository;
 import com.example.demo.account.repository.UserTokenRepositoryImpl;
 import com.example.demo.account.service.request.AccountRegisterRequest;
+import com.example.demo.redis.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -21,6 +23,7 @@ public class AccountServiceImpl implements AccountService{
 
     final private AccountRepository accountRepository;
     final private UserTokenRepository userTokenRepository = UserTokenRepositoryImpl.getInstance();
+    final private RedisService redisService;
 
     @Override
     public Boolean register(AccountRegisterRequest request) {
@@ -40,16 +43,17 @@ public class AccountServiceImpl implements AccountService{
     public String login(AccountLoginRequestForm requestForm) {
         Optional<Account> maybeAccount = accountRepository.findByEmail(requestForm.getEmail());
 
-        if(maybeAccount.isPresent()) {
-            if(requestForm.getPassword().equals(maybeAccount.get().getPassword())) {
+            if(maybeAccount.isPresent()) {
                 final Account account = maybeAccount.get();
-                final String userToken = UUID.randomUUID().toString();
-                userTokenRepository.save(userToken, account.getId());
-                return userToken;
-            }
-        }
 
-        return null;
+                if(requestForm.getPassword().equals(maybeAccount.get().getPassword())) {
+                    final String userToken = UUID.randomUUID().toString();
+                    userTokenRepository.save(userToken, account.getId());
+                    return userToken;
+                }
+            }
+
+        return "";
     }
 
     @Override
